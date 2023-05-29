@@ -79,23 +79,31 @@ label {
 input {
     margin-top: .75rem;
     min-height: 3.5rem;
-    border-radius: .75rem;
+    border-radius: .5rem;
     font-size: 1rem;
     padding-left: 1.5rem;
     border: 1px solid var(--charcoal-grey);
     position: relative;
 }
 
+.error {
+    background-color: hsla(4, 100%, 67%, .25);
+    border: 1px solid var(--tomato);
+    color: var(--tomato);
+}
+
 span {
     color: var(--tomato);
     margin-bottom: -.75rem;
     margin-top: .25rem;
+    font-weight: var(--bold);
+    font-size: .7rem;
 }
 
 button {
     margin-top: 1.5rem;
     min-height: 3.5rem;
-    border-radius: .75rem;
+    border-radius: .5rem;
     background-color: var(--dark-slate-grey);
     color: var(--white);
     font-size: 1rem;
@@ -128,11 +136,9 @@ img {
     margin-top: auto;
 }
 
-
-
 /* DESKTOP */
 
-@media (min-width: 30rem) {
+@media (min-width: 37.5rem) {
     body {
         background-color: var(--dark-slate-grey);
         display: grid;
@@ -143,25 +149,58 @@ img {
         display: flex;
         flex-direction: row;
         background-color: var(--white);
-        gap: 2rem;
-        max-width: fit-content;
-        border-radius: 2.2rem;
+        gap: 4rem;
         padding: 1.5rem;
+        padding-left: 3.5rem;
+        border-radius: 2.25rem;
     }
 
 
     section {
         display: flex;
         flex-direction: column;
+        padding: 0;
+        max-width: 24rem;
+    }
+
+    h1 {
+        margin-top: 4.5rem;
+        font-size: 3.25rem;
     }
 
     p {
-        font-size: .75rem;
+        margin-top: -.25rem;
+    }
+
+    ul {
+        margin-top: .7rem;
+    }
+
+    li {
+        margin-bottom: .75rem;
     }
 
     form {
         display: flex;
         flex-direction: column;
+        position: relative;
+    }
+
+    span {
+        position: absolute;
+        right: 0;
+        top: -.25rem;
+    }
+
+    button:hover,
+    input:hover {
+        cursor: pointer;
+    }
+
+    button:hover,
+    button:focus {
+        background-image: linear-gradient(90deg, #ff5476, #ff683e);
+        border: none;
     }
 
 }

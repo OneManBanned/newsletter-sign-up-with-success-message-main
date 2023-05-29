@@ -29,7 +29,7 @@ function App() {
 
   function displayImg() {
     if (window !== undefined) {
-      if (window.innerWidth < 500) {
+      if (window.innerWidth < 600) {
         setImage(mobileImg)
       } else {
         setImage(desktopImg)
@@ -89,6 +89,9 @@ function App() {
                 onBlur={formik.handleBlur}
                 value={formik.values.email}
                 placeholder='email@company.com'
+                className={formik.touched.email && formik.errors.email
+                  ? 'error'
+                  : ''}
               />
               {formik.touched.email && formik.errors.email ? (
                 <span>{formik.errors.email}</span>
