@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useFormik } from 'formik';
 import './styles/styles.css'
 import mobileImg from './assets/images/illustration-sign-up-mobile.svg'
@@ -15,20 +15,17 @@ const validate = values => {
 }
 
 function App() {
+  // Used to toggle between success and sign-up 
   const [isCompleted, setIsCompleted] = useState(false)
+
+  // Used to store email string for success screen
   const [userEmail, setUserEmail] = useState(null)
+
+  // Set correct image for desktop/mobile view - see displayImg function
   const [image, setImage] = useState('')
 
-  const formik = useFormik({
-    initialValues: {
-      email: ''
-    },
-    validate,
-    onSubmit: values => {
-      setUserEmail(values.email)
-      setIsCompleted(!isCompleted)
-    },
-  });
+  // Store ref to input field in order to manage focus
+  const inputRef = useRef(null)
 
   function displayImg() {
     if (window !== undefined) {
@@ -40,13 +37,34 @@ function App() {
     }
   }
 
+  // On load set correct image and focus input field
   useEffect(() => {
     displayImg()
+    inputRef.current.focus()
   }, [])
 
+  // On Change from succes to signup reset form values and focus input
+  useEffect(() => {
+    formik.values.email = ''
+    if (!isCompleted) {
+      inputRef.current.focus()
+    }
+  }, [isCompleted])
 
+  // listen for change in screen size
   window.addEventListener('resize', displayImg)
 
+  // Formik for handling - see docs => 'https://formik.org/docs/overview'
+  const formik = useFormik({
+    initialValues: {
+      email: ''
+    },
+    validate,
+    onSubmit: values => {
+      setUserEmail(values.email)
+      setIsCompleted(!isCompleted)
+    },
+  });
 
   return (
     <>
@@ -57,18 +75,20 @@ function App() {
             <p>join 60,000+ product managers receiving monthly updates</p>
             <ul>
               <li>Product discovery and building what matters</li>
-              <li>Measureing to ensure updates are a success</li>
-              <li>and much more!</li>
+              <li>Measuring to ensure updates are a success</li>
+              <li>And much more!</li>
             </ul>
             < form onSubmit={formik.handleSubmit}>
-              <label htmlFor="email">Email Address</label>
+              <label htmlFor="email">Email address</label>
               <input
                 id="email"
+                ref={inputRef}
                 name="email"
                 type="email"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.email}
+                placeholder='email@company.com'
               />
               {formik.touched.email && formik.errors.email ? (
                 <span>{formik.errors.email}</span>
@@ -76,21 +96,18 @@ function App() {
               <button type="submit">Subscribe to monthly newsletter</button>
             </form>
           </section>
-          <div>
-            <img src={image} alt="" />
-          </div>
+          <img src={image} alt="" />
+
         </main>
-        : <main>
-          <h1>Thank for subscribing!</h1>
-          <p>A confirmation email has been sent to {userEmail}. Please open it and click the button inside to confirm your subscription.</p>
-          <button onClick={() => setIsCompleted(!isCompleted)}>Dimiss message</button>
+        : <main className='success'>
+          <h1 className='success-heading'>Thank for subscribing!</h1>
+          <p className='success-para'>A confirmation email has been sent to <span className='success-span'>{userEmail}</span>. Please open it and click the button inside to confirm your subscription.</p>
+          <button className='success-btn' onClick={() => setIsCompleted(!isCompleted)}>Dimiss message</button>
         </main>
       }
     </>
   )
 
 }
-
-
 
 export default App
