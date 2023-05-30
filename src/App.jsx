@@ -9,7 +9,7 @@ const validate = values => {
   if (!values.email) {
     errors.email = 'Required';
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors.email = 'Invalid email address';
+    errors.email = 'valid email required';
   }
   return errors;
 }
@@ -19,7 +19,7 @@ function App() {
   const [isCompleted, setIsCompleted] = useState(false)
 
   // Used to store email string for success screen
-  const [userEmail, setUserEmail] = useState(null)
+  const [userEmail, setUserEmail] = useState('')
 
   // Set correct image for desktop/mobile view - see displayImg function
   const [image, setImage] = useState('')
@@ -29,7 +29,7 @@ function App() {
 
   function displayImg() {
     if (window !== undefined) {
-      if (window.innerWidth < 600) {
+      if (window.innerWidth < 650) {
         setImage(mobileImg)
       } else {
         setImage(desktopImg)
@@ -63,6 +63,7 @@ function App() {
     onSubmit: values => {
       setUserEmail(values.email)
       setIsCompleted(!isCompleted)
+      console.log(userEmail, values.email)
     },
   });
 
@@ -78,7 +79,7 @@ function App() {
               <li>Measuring to ensure updates are a success</li>
               <li>And much more!</li>
             </ul>
-            < form onSubmit={formik.handleSubmit}>
+            < form onSubmit={formik.handleSubmit} noValidate>
               <label htmlFor="email">Email address</label>
               <input
                 id="email"
@@ -94,23 +95,22 @@ function App() {
                   : ''}
               />
               {formik.touched.email && formik.errors.email ? (
-                <span>{formik.errors.email}</span>
+                <span className='err-span'>{formik.errors.email}</span>
               ) : null}
               <button type="submit">Subscribe to monthly newsletter</button>
             </form>
           </section>
           <img src={image} alt="" />
-
         </main>
         : <main className='success'>
-          <h1 className='success-heading'>Thank for subscribing!</h1>
-          <p className='success-para'>A confirmation email has been sent to <span className='success-span'>{userEmail}</span>. Please open it and click the button inside to confirm your subscription.</p>
-          <button className='success-btn' onClick={() => setIsCompleted(!isCompleted)}>Dimiss message</button>
+          <h1 className='success-heading'>Thanks for subscribing!</h1>
+          <p className='success-para'>
+            A confirmation email has been sent to <span className='success-span'>{userEmail}</span>. Please open it and click the button inside to confirm your subscription.</p>
+          <button className='success-btn' onClick={() => setIsCompleted(!isCompleted)}>Dismiss message</button>
         </main>
       }
     </>
   )
-
 }
 
 export default App
